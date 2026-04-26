@@ -1,6 +1,12 @@
+local inventoryState = nil
+
 local function toggleNuiFrame(shouldShow)
   SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
+
+  if shouldShow then
+    TriggerServerEvent('np_inventory:server:saveInventory', inventoryState or {})
+  end
 end
 
 RegisterCommand('show-nui', function()
@@ -17,9 +23,12 @@ end)
 RegisterNUICallback('getClientData', function(data, cb)
   debugPrint('Data sent by React', json.encode(data))
 
--- Lets send back client coords to the React frame for use
   local curCoords = GetEntityCoords(PlayerPedId())
-
   local retData <const> = { x = curCoords.x, y = curCoords.y, z = curCoords.z }
   cb(retData)
+end)
+
+RegisterNetEvent('np_inventory:client:syncInventory', function(payload)
+  inventoryState = payload
+  SendReactMessage('inventory:update', payload)
 end)
