@@ -7,8 +7,33 @@ Config.Framework = 'auto'
 Config.Database = 'auto'
 
 Config.Debug = GetConvarInt(('%s-debugMode'):format(GetCurrentResourceName()), 0) == 1
-Config.DefaultSlots = 40
-Config.DefaultMaxWeight = 120000 -- grams
+
+Config.InventoryProfiles = {
+  player = {
+    slots = 40,
+    maxWeight = 120000,
+  },
+  trunk = {
+    slots = 80,
+    maxWeight = 250000,
+  },
+  glovebox = {
+    slots = 15,
+    maxWeight = 30000,
+  },
+  stash = {
+    slots = 80,
+    maxWeight = 250000,
+  },
+  drop = {
+    slots = 30,
+    maxWeight = 60000,
+  },
+}
+
+-- Legacy aliases
+Config.DefaultSlots = Config.InventoryProfiles.player.slots
+Config.DefaultMaxWeight = Config.InventoryProfiles.player.maxWeight
 
 Config.FrameworkResources = {
   qbcore = { 'qb-core' },
