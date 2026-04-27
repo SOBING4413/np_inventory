@@ -99,3 +99,20 @@ pre {
   justify-content: center;
   align-items: center;
 }
+
+.inv-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+  padding: 0.3rem;
+}
+
+.inv-item-count {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 0.1rem;
+  color: #fff;
+  font-size: 0.7rem;
+  text-shadow: 0 0 3px #000;
+}

@@ -60,6 +60,19 @@ File: `shared/config.lua`
 - `Config.Database = 'auto'` (atau `oxmysql`, `mysql-async`, `memory`)
 - `Config.InventoryProfiles` untuk set slot/weight per konteks (`player`, `trunk`, `glovebox`, `stash`, `drop`)
 
+File shared tambahan (siap pakai untuk extend fitur):
+- `shared/items.lua` (master item + image)
+- `shared/animations.lua`
+- `shared/crafting.lua`
+- `shared/evidence.lua`
+- `shared/licenses.lua`
+- `shared/shops.lua`
+- `shared/stashes.lua`
+- `shared/vehicles.lua`
+- `shared/weapons.lua`
+
+Default image item web ada di: `web/public/images/items/*.svg` (otomatis ikut build ke `web/build/images/items`).
+
 ## Exports (Server)
 
 - `exports.np_inventory:OpenInventory(source, invType, data)`
