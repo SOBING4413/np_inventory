@@ -51,95 +51,37 @@ interface ReturnData {
   z: number;
 }
 
+type SlotItem = {
+  name: string;
+  image: string;
+  count?: number;
+};
+
 const App: React.FC = () => {
   const [clientData, setClientData] = useState<ReturnData | null>(null);
 
-  const playerSlots = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-  ] as any[];
+  const createSlots = (size: number, initial: Record<number, SlotItem>): Array<SlotItem | null> =>
+    Array.from({ length: size }, (_, index) => initial[index + 1] || null);
 
-  const groundSlots = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-  ] as any[];
+  const playerSlots = createSlots(15, {
+    1: { name: 'water', image: '/images/items/water.svg', count: 3 },
+    2: { name: 'bread', image: '/images/items/bread.svg', count: 2 },
+    3: { name: 'phone', image: '/images/items/phone.svg' },
+  });
 
-  const trunkSlots = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-  ] as any[];
+  const groundSlots = createSlots(30, {
+    2: { name: 'bread', image: '/images/items/bread.svg' },
+  });
 
-  const backpackSlots = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-  ] as any[];
+  const trunkSlots = createSlots(15, {
+    1: { name: 'lockpick', image: '/images/items/lockpick.svg', count: 4 },
+    3: { name: 'pistol', image: '/images/items/pistol.svg' },
+  });
+
+  const backpackSlots = createSlots(15, {
+    1: { name: 'water', image: '/images/items/water.svg' },
+    4: { name: 'bread', image: '/images/items/bread.svg', count: 5 },
+  });
 
   // example code for getting data
   const handleGetClientData = () => {
@@ -293,7 +235,7 @@ const App: React.FC = () => {
             <PerfectScrollbar className="inv-panel-max-height">
               <div className="flex flex-wrap gap-4 inv-panel">
                 {playerSlots.map(function (object, i) {
-                  return <InvItem key={i}>
+                  return <InvItem key={i} image={object?.image} label={object?.name} count={object?.count}>
                     {i < 5 && <div className="shortcut-icon">{i + 1}</div>}
                   </InvItem>;
                 })}
@@ -315,7 +257,7 @@ const App: React.FC = () => {
             <PerfectScrollbar className="inv-panel-max-height">
               <div className="flex flex-wrap gap-4 inv-panel">
                 {backpackSlots.map(function (object, i) {
-                  return <InvItem key={i} />;
+                  return <InvItem key={i} image={object?.image} label={object?.name} count={object?.count} />;
                 })}
               </div>
             </PerfectScrollbar>
@@ -337,7 +279,7 @@ const App: React.FC = () => {
             <PerfectScrollbar className="inv-panel-max-height">
               <div className="flex flex-wrap gap-4 inv-panel">
                 {groundSlots.map(function (object, i) {
-                  return <InvItem key={i} />;
+                  return <InvItem key={i} image={object?.image} label={object?.name} count={object?.count} />;
                 })}
               </div>
             </PerfectScrollbar>
@@ -357,7 +299,7 @@ const App: React.FC = () => {
             <PerfectScrollbar className="inv-panel-max-height">
               <div className="flex flex-wrap gap-4 inv-panel">
                 {trunkSlots.map(function (object, i) {
-                  return <InvItem key={i} />;
+                  return <InvItem key={i} image={object?.image} label={object?.name} count={object?.count} />;
                 })}
               </div>
             </PerfectScrollbar>

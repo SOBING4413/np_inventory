@@ -31,10 +31,21 @@ local function normalizeInventory(inv, invType)
   inv.slots = type(inv.slots) == 'table' and inv.slots or {}
 
   for i = 1, inv.slotCount do
-    if inv.slots[i] == nil then
+    local slot = inv.slots[i]
+    if slot == nil then
       inv.slots[i] = false
-    elseif type(inv.slots[i]) ~= 'table' and inv.slots[i] ~= false then
+    elseif type(slot) ~= 'table' and slot ~= false then
       inv.slots[i] = false
+    elseif type(slot) == 'table' then
+      local itemName = tostring(slot.name or ''):lower()
+      if itemName == '' or (Config.Items and not Config.Items[itemName]) then
+        inv.slots[i] = false
+      else
+        slot.name = itemName
+        slot.count = math.max(1, math.floor(tonumber(slot.count) or 1))
+        slot.slot = i
+        inv.slots[i] = slot
+      end
     end
   end
 

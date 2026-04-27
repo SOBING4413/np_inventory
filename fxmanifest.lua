@@ -12,6 +12,15 @@ ui_page 'web/build/index.html'
 
 shared_script {
   'shared/config.lua',
+  'shared/items.lua',
+  'shared/animations.lua',
+  'shared/crafting.lua',
+  'shared/evidence.lua',
+  'shared/licenses.lua',
+  'shared/shops.lua',
+  'shared/stashes.lua',
+  'shared/vehicles.lua',
+  'shared/weapons.lua',
 }
 
 client_scripts {
