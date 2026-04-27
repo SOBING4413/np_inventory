@@ -26,12 +26,14 @@ local function normalizeInventory(inv, invType)
   end
 
   local profile = getProfile(invType)
-  inv.slotCount = tonumber(inv.slotCount) or profile.slots
-  inv.maxWeight = tonumber(inv.maxWeight) or profile.maxWeight
+  inv.slotCount = profile.slots
+  inv.maxWeight = profile.maxWeight
   inv.slots = type(inv.slots) == 'table' and inv.slots or {}
 
   for i = 1, inv.slotCount do
     if inv.slots[i] == nil then
+      inv.slots[i] = false
+    elseif type(inv.slots[i]) ~= 'table' and inv.slots[i] ~= false then
       inv.slots[i] = false
     end
   end
@@ -118,6 +120,10 @@ RegisterNetEvent('np_inventory:server:moveSlot', function(invType, invName, from
 
   fetchInventory(src, invType, invName, function(inventory, owner, resolvedType, resolvedName)
     if fromSlot > inventory.slotCount or toSlot > inventory.slotCount then return end
+    if fromSlot == toSlot then
+      syncInventoryToClient(src, resolvedType, resolvedName, inventory)
+      return
+    end
 
     local temp = inventory.slots[fromSlot]
     inventory.slots[fromSlot] = inventory.slots[toSlot]
