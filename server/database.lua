@@ -3,6 +3,19 @@ Database = {
   memory = {},
 }
 
+local function deepCopy(value)
+  if type(value) ~= 'table' then
+    return value
+  end
+
+  local copy = {}
+  for k, v in pairs(value) do
+    copy[k] = deepCopy(v)
+  end
+
+  return copy
+end
+
 local function isStarted(resource)
   return GetResourceState(resource) == 'started'
 end
@@ -72,7 +85,7 @@ end
 
 function Database:getNamedInventory(owner, invType, invName, cb)
   if self.backend == 'memory' then
-    cb(self.memory[makeMemoryKey(owner, invType, invName)] or {})
+    cb(deepCopy(self.memory[makeMemoryKey(owner, invType, invName)] or {}))
     return
   end
 
@@ -108,7 +121,7 @@ function Database:saveNamedInventory(owner, invType, invName, inventory, cb)
   local key = makeMemoryKey(owner, invType, invName)
 
   if self.backend == 'memory' then
-    self.memory[key] = inventory or {}
+    self.memory[key] = deepCopy(inventory or {})
     if cb then cb(true) end
     return
   end

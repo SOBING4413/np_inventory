@@ -1,10 +1,12 @@
 local inventoryState = nil
+local inventoryReady = false
 local inventoryContext = {
   type = 'player',
   name = 'player',
 }
 
 local function requestInventory(invType, invName)
+  inventoryReady = false
   inventoryContext.type = invType or 'player'
   inventoryContext.name = invName or 'player'
   TriggerServerEvent('np_inventory:server:requestInventory', inventoryContext.type, inventoryContext.name)
@@ -17,7 +19,9 @@ local function toggleNuiFrame(shouldShow)
   if shouldShow then
     requestInventory(inventoryContext.type, inventoryContext.name)
   else
-    TriggerServerEvent('np_inventory:server:saveNamedInventory', inventoryContext.type, inventoryContext.name, inventoryState or {})
+    if inventoryReady and type(inventoryState) == 'table' then
+      TriggerServerEvent('np_inventory:server:saveNamedInventory', inventoryContext.type, inventoryContext.name, inventoryState)
+    end
   end
 end
 
@@ -58,12 +62,14 @@ end)
 RegisterNetEvent('np_inventory:client:syncInventory', function(payload)
   if type(payload) == 'table' and payload.inventory then
     inventoryState = payload.inventory
+    inventoryReady = true
     if type(payload.context) == 'table' then
       inventoryContext.type = payload.context.type or inventoryContext.type
       inventoryContext.name = payload.context.name or inventoryContext.name
     end
   else
     inventoryState = payload
+    inventoryReady = type(payload) == 'table'
   end
 
   SendReactMessage('inventory:update', inventoryState)
